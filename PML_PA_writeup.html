@@ -102,7 +102,7 @@ t &lt;-<span class="st"> </span><span class="kw">cbind</span>(a,b,f,d)
 tab &lt;-<span class="st"> </span><span class="kw">xtable</span>(t)
 <span class="kw">print</span>(tab, <span class="st">&quot;html&quot;</span>)</code></pre>
 <!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
-<!-- Sun Oct 19 22:24:34 2014 -->
+<!-- Sun Oct 19 23:29:32 2014 -->
 <table border="1">
 <tr> <th>  </th> <th> 
 arm
@@ -175,7 +175,7 @@ E
 <li><p>A class : being greater on arm (&gt; 27)</p></li>
 <li><p>B class : being equal on dumbbell (~ 14.5), greater on forearm acceleration - not very surprising (&gt; 34.5) and lesser on arm (&lt; 27)</p></li>
 <li><p>C class : which we cannot classify in other categories</p></li>
-<li><p>D class : being minimum on arm &amp; dumbbell accelerations (belt &lt; 24 &amp; dumbbell &lt; 12)</p></li>
+<li><p>D class : being minimum on arm &amp; dumbbell accelerations (arm &lt; 24 &amp; dumbbell &lt; 12)</p></li>
 <li><p>E class : being maximum on belt acceleration - not so surprising (&gt; 12)</p></li>
 </ul>
 <p>Evidently, R can do better choice than this minimal and naïve decision tree using rpart method.</p>
@@ -191,17 +191,100 @@ fitC &lt;-<span class="st"> </span><span class="kw">rpart</span>(classe ~<span c
 <pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span><span class="kw">predict</span>(fitC, training, <span class="dt">type =</span> <span class="st">&quot;class&quot;</span>)
 c &lt;-<span class="st"> </span><span class="kw">confusionMatrix</span>(p, training$classe)
 <span class="kw">print</span>(<span class="kw">xtable</span>(c$table), <span class="st">&quot;html&quot;</span>)</code></pre>
-<pre><code>## &lt;!-- html table generated in R 3.1.1 by xtable 1.7-4 package --&gt;
-## &lt;!-- Sun Oct 19 22:24:35 2014 --&gt;
-## &lt;table border=1&gt;
-## &lt;tr&gt; &lt;th&gt;  &lt;/th&gt; &lt;th&gt; A &lt;/th&gt; &lt;th&gt; B &lt;/th&gt; &lt;th&gt; C &lt;/th&gt; &lt;th&gt; D &lt;/th&gt; &lt;th&gt; E &lt;/th&gt;  &lt;/tr&gt;
-##   &lt;tr&gt; &lt;td align=&quot;right&quot;&gt; A &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 4315 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1244 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1125 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1302 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 622 &lt;/td&gt; &lt;/tr&gt;
-##   &lt;tr&gt; &lt;td align=&quot;right&quot;&gt; B &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 484 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1930 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1002 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 725 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1055 &lt;/td&gt; &lt;/tr&gt;
-##   &lt;tr&gt; &lt;td align=&quot;right&quot;&gt; C &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 435 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 385 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1238 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 416 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 393 &lt;/td&gt; &lt;/tr&gt;
-##   &lt;tr&gt; &lt;td align=&quot;right&quot;&gt; D &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 332 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 139 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  24 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 596 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 290 &lt;/td&gt; &lt;/tr&gt;
-##   &lt;tr&gt; &lt;td align=&quot;right&quot;&gt; E &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  14 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  99 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt;  33 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 177 &lt;/td&gt; &lt;td align=&quot;right&quot;&gt; 1247 &lt;/td&gt; &lt;/tr&gt;
-##    &lt;/table&gt;</code></pre>
+<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
+<!-- Sun Oct 19 23:29:34 2014 -->
+<table border="1">
+<tr> <th>  </th> <th> 
+A
+</th> <th> 
+B
+</th> <th> 
+C
+</th> <th> 
+D
+</th> <th> 
+E
+</th>  </tr>
+  <tr> <td align="right"> 
+A
+</td> <td align="right"> 
+4315
+</td> <td align="right"> 
+1244
+</td> <td align="right"> 
+1125
+</td> <td align="right"> 
+1302
+</td> <td align="right"> 
+622
+</td> </tr>
+  <tr> <td align="right"> 
+B
+</td> <td align="right"> 
+484
+</td> <td align="right"> 
+1930
+</td> <td align="right"> 
+1002
+</td> <td align="right"> 
+725
+</td> <td align="right"> 
+1055
+</td> </tr>
+  <tr> <td align="right"> 
+C
+</td> <td align="right"> 
+435
+</td> <td align="right"> 
+385
+</td> <td align="right"> 
+1238
+</td> <td align="right"> 
+416
+</td> <td align="right"> 
+393
+</td> </tr>
+  <tr> <td align="right"> 
+D
+</td> <td align="right"> 
+332
+</td> <td align="right"> 
+139
+</td> <td align="right">  
+24
+</td> <td align="right"> 
+596
+</td> <td align="right"> 
+290
+</td> </tr>
+  <tr> <td align="right"> 
+E
+</td> <td align="right">  
+14
+</td> <td align="right">  
+99
+</td> <td align="right">  
+33
+</td> <td align="right"> 
+177
+</td> <td align="right"> 
+1247
+</td> </tr>
+   </table>
+
 <p>We think that this type of predictive algorithm, better but by a similar way, has been made up to obtain such better result.</p>
+<p>The resulting fit did 9/20 good predictions.</p>
+<p>On hand, my naïve algorithm did this prediction :</p>
+<pre class="sourceCode r"><code class="sourceCode r">naiveAnswers &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>,<span class="dv">20</span>)
+naiveAnswers[<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">12</span>,<span class="dv">14</span>,<span class="dv">16</span>,<span class="dv">18</span>,<span class="dv">20</span>)] &lt;-<span class="st"> &quot;A&quot;</span>
+naiveAnswers[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">10</span>,<span class="dv">17</span>,<span class="dv">19</span>)] &lt;-<span class="st"> &quot;E&quot;</span>
+naiveAnswers[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">13</span>,<span class="dv">17</span>,<span class="dv">19</span>)] &lt;-<span class="st"> &quot;D&quot;</span>
+naiveAnswers[<span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>)] &lt;-<span class="st"> &quot;B&quot;</span>
+naiveAnswers[<span class="kw">c</span>(<span class="dv">7</span>,<span class="dv">15</span>)] &lt;-<span class="st"> &quot;C&quot;</span>
+naiveAnswers</code></pre>
+<pre><code>##  [1] &quot;D&quot; &quot;A&quot; &quot;A&quot; &quot;B&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;B&quot; &quot;A&quot; &quot;E&quot; &quot;A&quot; &quot;A&quot; &quot;D&quot; &quot;A&quot; &quot;C&quot; &quot;A&quot; &quot;D&quot;
+## [18] &quot;A&quot; &quot;D&quot; &quot;A&quot;</code></pre>
+<p>May be not so bad ?</p>
 
 
 </div>
