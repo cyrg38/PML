@@ -1,0 +1,81 @@
+---
+title: "PML_PA_writeup"
+author: "Cyrille GUIBERT as cyrg38"
+date: "19/10/2014"
+output:
+  html_document:
+    highlight: tango
+---
+
+According to the documentation :
+_"Six young health participants were asked to perform one set of 10 repetitions of the Unilateral Dumbbell Biceps Curl in five different fashions: exactly according to the specification (Class A), throwing the elbows to the front (Class B), lifting the dumbbell only halfway (Class C), lowering the dumbbell only halfway (Class D) and throwing the hips to the front (Class E)."_
+
+Thus we ought to be able to recognize the activity scheme from combinatory of parameters.
+We would then expect to see some caracteristics change for :
+
+* A classe : given for comparison  
+
+* B classe : _thowing the elbows to the front_, we would expect change in parameters like "forearm"  
+
+* C classe : _lifting the dumbbell only halfway_, we would expect change in parameters combining "forearm" and "dumbbell"  
+
+* D classe : _lowering the dumbbell only halfway_,  we would expect change in parameters combining "forearm" and "dumbbell" at the reverse of classe C  
+
+* E classe : _throwing the hips to the front_, we would expect change in parameters concerning "belt"  
+
+```{r , cache=TRUE}
+training <- read.table("pml-training.csv", header=T, sep=",")
+testing <- read.table("pml-testing.csv", header = T, sep=",")
+classA <- subset(training, subset = classe == "A")
+classB <- subset(training, subset = classe == "B")
+classC <- subset(training, subset = classe == "C")
+classD <- subset(training, subset = classe == "D")
+classE <- subset(training, subset = classe == "E")
+nms <- names(training)
+belt <- grep("_belt$", perl = T, nms, value =F)
+arm <- grep("_arm$", perl = T, nms, value =F)
+forearm <- grep("_forearm$", perl = T, nms, value =F)
+dumbbell <- grep("_dumbbell$", perl = T, nms, value =F)
+```
+
+```{r , results="asis"}
+b <- tapply(training[ , belt]$total_accel_belt, training$classe, mean, na.rm=T)
+a <- tapply(training[ , arm]$total_accel_arm, training$classe, mean, na.rm=T)
+f <- tapply(training[ , forearm]$total_accel_forearm, training$classe, mean, na.rm=T)
+d <- tapply(training[ , dumbbell]$total_accel_dumbbell, training$classe, mean, na.rm=T)
+t <- cbind(a,b,f,d)
+dimnames(t)[[2]] <- c("arm","belt","forearm","dumbbell")
+library(xtable)
+tab <- xtable(t)
+print(tab, "html")
+```
+
+We can then describe approximatively each class from this classification (retaining only 1 parameter on each bifurcation, when possible) as :
+
+* A class : being greater on arm (> 27)  
+
+* B class : being equal on dumbbell (~ 14.5), greater on forearm acceleration - not very surprising (> 34.5) and lesser on arm (< 27)  
+
+* C class : which we cannot classify in other categories  
+
+* D class : being minimum on arm & dumbbell accelerations (belt < 24 & dumbbell < 12)  
+
+* E class : being maximum on belt acceleration - not so surprising (> 12)  
+
+Evidently, R can do better choice than this minimal and naïve decision tree using rpart method.
+
+Our first try is to create a model based on the same analysis, focused on acceleration from the 4 parameters.
+
+```{r}
+library(caret)
+library(rpart)
+library(rpart.plot)
+fitC <- rpart(classe ~ total_accel_arm + total_accel_belt + total_accel_forearm + total_accel_dumbbell, training, method="class")
+rpart.plot(fitC)
+p <- predict(fitC, training, type = "class")
+c <- confusionMatrix(p, training$classe)
+print(xtable(c$table), "html")
+```
+
+We think that this type of predictive algorithm, better but by a similar way, has been made up to obtain such better result.
+
